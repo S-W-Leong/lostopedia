@@ -48,7 +48,21 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Start isolated local Supabase project
-        run: pnpm exec supabase start > "$RUNNER_TEMP/supabase-start.log" 2>&1 || { echo 'Local Supabase start failed'; exit 1; }
+        run: |
+          if ! pnpm exec supabase start > "$RUNNER_TEMP/supabase-start.log" 2>&1; then
+            python3 - "$RUNNER_TEMP/supabase-start.log" <<'PY'
+          import re
+          import sys
+
+          lines = open(sys.argv[1], encoding='utf-8', errors='replace').readlines()
+          errors = [line for line in lines if re.search(r'error|fail|denied|timeout|timed out|unavailable|rate limit|pull|unable|cannot', line, re.I)]
+          print('Local Supabase start failed; diagnostic lines:')
+          for line in (errors or lines)[-30:]:
+              safe = re.sub(r'(?i)(?:sb_(?:secret|publishable)_[A-Za-z0-9_-]+|eyJ[A-Za-z0-9_.-]{20,}|(?:postgres(?:ql)?|https?)://\S+|Bearer\s+\S+)', '[redacted]', line)
+              print(safe[:500], end='')
+          PY
+            exit 1
+          fi
       - name: Verify project identity and reset
         run: |
           test "$(docker ps --filter name=^/supabase_db_lostopedia-template$ --format '{{.Names}}')" = supabase_db_lostopedia-template
