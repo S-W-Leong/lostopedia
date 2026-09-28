@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm your signup</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f7f8fb; color: #132033; font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;">
+    <div style="display: none; max-height: 0; overflow: hidden; opacity: 0; mso-hide: all;">
+      Confirm your email to start using %%APP_NAME%%.
+    </div>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f7f8fb;">
+      <tr>
+        <td align="center" style="padding: 32px 16px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 640px;">
+            <tr>
+              <td style="padding-bottom: 16px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td align="center" valign="middle" width="44" height="44" style="width: 44px; height: 44px;">
+                      <img src="{{ .SiteURL }}%%LOGO_PATH%%" alt="%%APP_NAME%% logo" width="44" height="44" style="display: block; width: 44px; height: 44px; border: 0; border-radius: 12px;" />
+                    </td>
+                    <td style="padding-left: 12px;">
+                      <div style="font-size: 20px; line-height: 24px; font-weight: 700; color: #132033;">%%APP_NAME%%</div>
+                      <div style="font-size: 13px; line-height: 18px; color: #5b6b80;">%%DESCRIPTION%%</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="border-radius: 24px; background-color: #ffffff; border: 1px solid #d4dce8; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); overflow: hidden;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="padding: 32px 32px 12px; background: linear-gradient(180deg, rgba(36, 87, 214, 0.12) 0%, rgba(238, 242, 248, 0.45) 100%);">
+                      <div style="display: inline-block; padding: 8px 14px; border-radius: 999px; background-color: rgba(36, 87, 214, 0.14); color: #2457d6; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">
+                        Confirm signup
+                      </div>
+                      <h1 style="margin: 18px 0 12px; font-size: 32px; line-height: 38px; font-weight: 700; color: #132033;">
+                        Verify your email to activate your account
+                      </h1>
+                      <p style="margin: 0; font-size: 16px; line-height: 26px; color: #455468;">
+                        You're one step away from posting items, browsing community listings, and reconnecting people with what they lost.
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 24px 32px 32px;">
+                      <p style="margin: 0 0 16px; font-size: 16px; line-height: 26px; color: #455468;">
+                        This confirmation was requested for <strong style="color: #132033;">{{ .Email }}</strong>.
+                      </p>
+                      <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 20px;">
+                        <tr>
+                          <td align="center" style="border-radius: 12px; background-color: #2457d6;">
+                            <a href="{{ .ConfirmationURL }}" style="display: inline-block; padding: 14px 24px; font-size: 15px; line-height: 20px; font-weight: 700; color: #f8fbff; text-decoration: none;">
+                              Confirm your email
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 20px; border-radius: 16px; background-color: #eef2f8;">
+                        <tr>
+                          <td style="padding: 18px 20px;">
+                            <div style="font-size: 13px; line-height: 18px; font-weight: 700; color: #132033; text-transform: uppercase; letter-spacing: 0.06em;">
+                              Why verify now
+                            </div>
+                            <div style="padding-top: 10px; font-size: 15px; line-height: 24px; color: #455468;">
+                              Confirming your email helps secure your account and unlocks the full %%APP_NAME%% experience for your community.
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                      <p style="margin: 0 0 8px; font-size: 14px; line-height: 22px; color: #5b6b80;">
+                        If the button doesn't work, copy and paste this link into your browser:
+                      </p>
+                      <p style="margin: 0 0 20px; word-break: break-all; font-size: 14px; line-height: 22px;">
+                        <a href="{{ .ConfirmationURL }}" style="color: #2457d6; text-decoration: underline;">{{ .ConfirmationURL }}</a>
+                      </p>
+                      <p style="margin: 0; font-size: 14px; line-height: 22px; color: #7a8799;">
+                        If you didn't create a %%APP_NAME%% account, you can safely ignore this email.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 16px 12px 0; text-align: center; font-size: 13px; line-height: 21px; color: #7a8799;">
+                Need help? Visit
+                <a href="{{ .SiteURL }}/help" style="color: #2457d6; text-decoration: none;">Help &amp; Support</a>.
+                <br />
+                %%APP_NAME%%, built for %%ORGANIZATION_NAME%%.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

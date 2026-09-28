@@ -1,0 +1,3 @@
+# Reviewed synthetic curl authorization examples in inherited documentation history.
+8a8c54564d6aaa28ccc0e71ab5ad6bb62ccb5fad:docs/PRODUCTION_DEPLOYMENT.md:curl-auth-header:203
+9aa19f7953677e987ff44cd3e276b3ac7674ee7a:docs/TESTING_EMBEDDINGS.md:curl-auth-header:307

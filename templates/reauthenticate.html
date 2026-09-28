@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirm reauthentication</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f7f8fb; color: #132033; font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;">
+    <div style="display: none; max-height: 0; overflow: hidden; opacity: 0; mso-hide: all;">
+      Use this verification code to continue securely in Lostopedia.
+    </div>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f7f8fb;">
+      <tr>
+        <td align="center" style="padding: 32px 16px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 640px;">
+            <tr>
+              <td style="padding-bottom: 16px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td align="center" valign="middle" width="44" height="44" style="width: 44px; height: 44px;">
+                      <img src="{{ .SiteURL }}/template-logo.svg" alt="Lostopedia logo" width="44" height="44" style="display: block; width: 44px; height: 44px; border: 0; border-radius: 12px;" />
+                    </td>
+                    <td style="padding-left: 12px;">
+                      <div style="font-size: 20px; line-height: 24px; font-weight: 700; color: #132033;">Lostopedia</div>
+                      <div style="font-size: 13px; line-height: 18px; color: #5b6b80;">Find lost belongings and help your community return found items.</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="border-radius: 24px; background-color: #ffffff; border: 1px solid #d4dce8; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); overflow: hidden;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                  <tr>
+                    <td style="padding: 32px 32px 12px; background: linear-gradient(180deg, rgba(185, 56, 70, 0.08) 0%, rgba(238, 242, 248, 0.45) 100%);">
+                      <div style="display: inline-block; padding: 8px 14px; border-radius: 999px; background-color: rgba(185, 56, 70, 0.14); color: #b93846; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;">
+                        Security check
+                      </div>
+                      <h1 style="margin: 18px 0 12px; font-size: 32px; line-height: 38px; font-weight: 700; color: #132033;">
+                        Enter this code to continue
+                      </h1>
+                      <p style="margin: 0; font-size: 16px; line-height: 26px; color: #455468;">
+                        A sensitive action needs one more verification step before we can continue.
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 24px 32px 32px;">
+                      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 20px; border-radius: 20px; background-color: #eef2f8; border: 1px solid #d4dce8;">
+                        <tr>
+                          <td align="center" style="padding: 24px 20px;">
+                            <div style="font-size: 12px; line-height: 18px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #5b6b80;">
+                              Verification code
+                            </div>
+                            <div style="padding-top: 8px; font-size: 36px; line-height: 42px; font-weight: 700; letter-spacing: 0.22em; color: #132033;">
+                              {{ .Token }}
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                      <p style="margin: 0 0 18px; font-size: 15px; line-height: 24px; color: #455468;">
+                        Enter this code in the Lostopedia window that asked for reauthentication. If you didn't start this action, ignore the email and review your account security.
+                      </p>
+                      <p style="margin: 0; font-size: 14px; line-height: 22px; color: #7a8799;">
+                        This code was issued for <strong style="color: #132033;">{{ .Email }}</strong>.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 16px 12px 0; text-align: center; font-size: 13px; line-height: 21px; color: #7a8799;">
+                Need help? Visit
+                <a href="{{ .SiteURL }}/help" style="color: #2457d6; text-decoration: none;">Help &amp; Support</a>.
+                <br />
+                Lostopedia, built for Example Community.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "Lostopedia",
+  "organizationName": "Example Community",
+  "description": "Find lost belongings and help your community return found items.",
+  "logoPath": "/template-logo.svg",
+  "supportEmail": "support@example.org",
+  "memberLabel": "member",
+  "location": {
+    "name": "Main location",
+    "slug": "main",
+    "country": "Example country",
+    "city": "Example city",
+    "latitude": 0,
+    "longitude": 0,
+    "zoom": 2
+  },
+  "office": {
+    "name": "Lost & Found office",
+    "address": "Contact the team for collection instructions",
+    "phone": null,
+    "email": null,
+    "hours": null,
+    "mapsUrl": null
+  },
+  "claimantReference": {
+    "label": "Member reference",
+    "required": true
+  },
+  "registration": {
+    "mode": "restricted",
+    "allowedDomains": ["example.org"]
+  }
+}
