@@ -191,13 +191,13 @@ import { calculateMatchScores } from '@/lib/utils/matching'
 const sourceItem = {
   category: 'electronics',
   date_lost_found: '2024-01-15',
-  geo_location: 'POINT(101.7260 3.2153)',
+  geo_location: 'POINT(0.0000 0.0000)',
 }
 
 const candidateItem = {
   category: 'electronics',
   date_lost_found: '2024-01-16',
-  geo_location: 'POINT(101.7265 3.2155)',
+  geo_location: 'POINT(0.0005 0.0002)',
   cosine_distance: 0.15,
 }
 

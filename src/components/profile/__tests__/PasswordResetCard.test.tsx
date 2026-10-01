@@ -23,16 +23,16 @@ describe('PasswordResetCard', () => {
     const user = userEvent.setup()
     mocks.resetPassword.mockResolvedValue({ success: true })
 
-    render(<PasswordResetCard email="student@tarc.edu.my" />)
+    render(<PasswordResetCard email="member@example.org" />)
 
     await user.click(screen.getByRole('button', { name: /email me a reset link/i }))
 
     await waitFor(() => {
-      expect(mocks.resetPassword).toHaveBeenCalledWith('student@tarc.edu.my')
+      expect(mocks.resetPassword).toHaveBeenCalledWith('member@example.org')
     })
 
     expect(
-      screen.getByText(/we've sent a password reset link to student@tarc\.edu\.my/i)
+      screen.getByText(/we've sent a password reset link to member@example\.org/i)
     ).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: /send another link/i })
@@ -43,7 +43,7 @@ describe('PasswordResetCard', () => {
     const user = userEvent.setup()
     mocks.resetPassword.mockResolvedValue({ success: true })
 
-    render(<PasswordResetCard email="student@tarc.edu.my" />)
+    render(<PasswordResetCard email="member@example.org" />)
 
     await user.click(screen.getByRole('button', { name: /email me a reset link/i }))
     await screen.findByRole('button', { name: /send another link/i })
@@ -61,7 +61,7 @@ describe('PasswordResetCard', () => {
       error: { message: 'Rate limit exceeded' },
     })
 
-    render(<PasswordResetCard email="student@tarc.edu.my" />)
+    render(<PasswordResetCard email="member@example.org" />)
 
     await user.click(screen.getByRole('button', { name: /email me a reset link/i }))
 
