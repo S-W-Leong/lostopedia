@@ -653,7 +653,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      map_items_in_bounds: {
+        Args: {
+          p_south: number
+          p_north: number
+          p_west: number
+          p_east: number
+          p_type: string | null
+          p_category: string | null
+        }
+        Returns: { id: string; type: string; title: string; latitude: number; longitude: number }[]
+      }
     }
     Enums: {
       [_ in never]: never
@@ -702,4 +712,3 @@ export type DbFlagUpdate = PublicSchema['Tables']['flags']['Update']
 export type DbNotificationUpdate = PublicSchema['Tables']['notifications']['Update']
 export type DbReputationEventUpdate = PublicSchema['Tables']['reputation_events']['Update']
 export type DbItemExtensionUpdate = PublicSchema['Tables']['item_extensions']['Update']
-

@@ -48,7 +48,7 @@ export function MiniMap({ location, type = 'lost', className = 'w-full h-64' }: 
     lng: location.longitude,
   }
 
-  const markerIcon: google.maps.Symbol = {
+  const markerIcon: google.maps.Symbol | undefined = typeof google === 'undefined' ? undefined : {
     path: google.maps.SymbolPath.CIRCLE,
     scale: 10,
     fillColor: type === 'lost' ? themeColors.lost : themeColors.found,

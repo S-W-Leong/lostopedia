@@ -1,5 +1,4 @@
 import { MainLayoutClient } from '@/components/layout/MainLayoutClient'
-import { GoogleMapsProvider } from '@/contexts/GoogleMapsContext'
 
 /**
  * App shell for search, map, item detail (public) and dashboard, post, messages, etc. (protected).
@@ -11,8 +10,6 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <GoogleMapsProvider>
-      <MainLayoutClient>{children}</MainLayoutClient>
-    </GoogleMapsProvider>
+    <MainLayoutClient>{children}</MainLayoutClient>
   )
 }

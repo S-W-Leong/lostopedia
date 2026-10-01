@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { Marker } from '@react-google-maps/api'
 import { MapContainer } from './MapContainer'
 import { DEFAULT_CAMPUS } from '@/lib/constants'
+import { loadGoogleMaps } from '@/lib/google-maps-loader'
 
 interface LocationMapPickerProps {
   /** Current location text (for display only) */
@@ -38,7 +39,7 @@ export function LocationMapPicker({
   const markerPosition = hasMarker ? { lat: latitude, lng: longitude } : undefined
 
   const handleMapClick = useCallback(
-    (e: google.maps.MapMouseEvent) => {
+    async (e: google.maps.MapMouseEvent) => {
       const latLng = e.latLng
       if (!latLng) return
 
@@ -46,15 +47,16 @@ export function LocationMapPicker({
       const lng = latLng.lng()
       setIsGeocoding(true)
 
-      const geocoder = new google.maps.Geocoder()
-      geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+      const fallback = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+      try {
+        await loadGoogleMaps('geocoding')
+        const { results } = await new google.maps.Geocoder().geocode({ location: { lat, lng } })
+        onLocationChange(results[0]?.formatted_address ?? fallback, lat, lng)
+      } catch {
+        onLocationChange(fallback, lat, lng)
+      } finally {
         setIsGeocoding(false)
-        if (status === 'OK' && results?.[0]) {
-          onLocationChange(results[0].formatted_address ?? `${lat.toFixed(6)}, ${lng.toFixed(6)}`, lat, lng)
-        } else {
-          onLocationChange(`${lat.toFixed(6)}, ${lng.toFixed(6)}`, lat, lng)
-        }
-      })
+      }
     },
     [onLocationChange]
   )

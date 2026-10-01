@@ -11,7 +11,10 @@ interface MapContainerProps {
   className?: string
   onClick?: (e: google.maps.MapMouseEvent) => void
   onLoad?: (map: google.maps.Map) => void
+  onBoundsChanged?: () => void
 }
+
+const defaultCenter = { lat: DEFAULT_CAMPUS.latitude, lng: DEFAULT_CAMPUS.longitude }
 
 const defaultMapOptions: google.maps.MapOptions = {
   disableDefaultUI: false,
@@ -32,14 +35,12 @@ const defaultMapOptions: google.maps.MapOptions = {
 
 export function MapContainer({
   children,
-  center = {
-    lat: DEFAULT_CAMPUS.latitude,
-    lng: DEFAULT_CAMPUS.longitude,
-  },
+  center = defaultCenter,
   zoom = DEFAULT_CAMPUS.zoom,
   className = 'w-full h-full',
   onClick,
   onLoad,
+  onBoundsChanged,
 }: MapContainerProps) {
   const { isLoaded, loadError } = useGoogleMaps()
 
@@ -49,7 +50,7 @@ export function MapContainer({
         <div className="text-center p-4">
           <p className="text-destructive font-medium">Error loading maps</p>
           <p className="text-sm text-muted-foreground mt-1">
-            Please check your Google Maps API key
+            The map is unavailable. Please reload the page to try again.
           </p>
         </div>
       </div>
@@ -75,9 +76,9 @@ export function MapContainer({
       options={defaultMapOptions}
       onClick={onClick}
       onLoad={onLoad}
+      onBoundsChanged={onBoundsChanged}
     >
       {children}
     </GoogleMap>
   )
 }
-

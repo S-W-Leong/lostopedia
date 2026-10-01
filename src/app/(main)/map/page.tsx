@@ -1,59 +1,28 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { ItemsMap } from '@/components/maps/ItemsMap'
 import { Button } from '@/components/ui/button'
 import { FilterChip } from '@/components/ui/filter-chip'
 import { NativeSelect } from '@/components/ui/native-select'
 import { ITEM_CATEGORIES, CATEGORY_LABELS } from '@/lib/constants'
-import type { ItemCard, PaginatedResponse } from '@/types'
+import type { MapBounds } from '@/lib/map-items'
+import { useMapMarkers } from '@/hooks/use-map-markers'
+import Link from 'next/link'
 import type { ItemCategory, ItemType } from '@/lib/constants'
 import { MapPin, Filter, X } from 'lucide-react'
 
 export default function MapPage() {
-  const [items, setItems] = useState<ItemCard[]>([])
-  const [loading, setLoading] = useState(true)
+  const [bounds, setBounds] = useState<MapBounds | null>(null)
   const [selectedType, setSelectedType] = useState<ItemType | 'all'>('all')
   const [selectedCategory, setSelectedCategory] = useState<ItemCategory | 'all'>('all')
   const [showFilters, setShowFilters] = useState(false)
 
-  // Fetch items
-  useEffect(() => {
-    const fetchItems = async () => {
-      setLoading(true)
-
-      // Build search params
-      const params = new URLSearchParams()
-      if (selectedType !== 'all') params.set('type', selectedType)
-      if (selectedCategory !== 'all') params.set('category', selectedCategory)
-      params.set('limit', '500') // Get more items for map view
-      params.set('sortBy', 'newest')
-
-      try {
-        const response = await fetch(`/api/search?${params}`)
-        const data: PaginatedResponse<ItemCard> = await response.json()
-
-        if (data.success) {
-          setItems(data.items)
-        } else {
-          console.error('Failed to fetch items:', data)
-          setItems([])
-        }
-      } catch (error) {
-        console.error('Error fetching items:', error)
-        setItems([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchItems()
-  }, [selectedType, selectedCategory])
-
-  // Count items with geo locations
-  const itemsWithLocation = items.filter(
-    (item) => item.geoLocation?.latitude && item.geoLocation?.longitude
-  )
+  const { items, loading, error, authRequired, hasMore, retry } = useMapMarkers(bounds, selectedType, selectedCategory)
+  const handleBoundsChange = useCallback((next: MapBounds) => {
+    setBounds(previous => previous && previous.south === next.south && previous.north === next.north &&
+      previous.west === next.west && previous.east === next.east ? previous : next)
+  }, [])
 
   const handleClearFilters = () => {
     setSelectedType('all')
@@ -74,23 +43,14 @@ export default function MapPage() {
                 <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-accent shrink-0" />
                 Item Map
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                {loading ? (
-                  'Loading items...'
-                ) : (
-                  <>
-                    Showing{' '}
-                    <span className="font-medium text-foreground">
-                      {itemsWithLocation.length}
-                    </span>{' '}
-                    of{' '}
-                    <span className="font-medium text-foreground">
-                      {items.length}
-                    </span>{' '}
-                    items with location data
-                  </>
-                )}
+              <p role="status" aria-live="polite" className="text-sm text-muted-foreground mt-1">
+                {!bounds ? 'Move or zoom the map to explore items.' : loading ? 'Loading items in this area...' : error ? error :
+                  items.length === 0 ? 'No items in this area. Move the map or adjust filters.' :
+                  `Showing ${items.length} items in this area.${hasMore ? ' More items are available; zoom in or adjust filters to see more.' : ''}`}
               </p>
+              {error && (authRequired ? (
+                <Link href="/login" className="text-sm underline">Sign in</Link>
+              ) : <Button variant="outline" size="sm" onClick={retry} className="mt-2">Retry</Button>)}
             </div>
 
             <Button
@@ -194,38 +154,7 @@ export default function MapPage() {
 
       {/* Map */}
       <div className="flex-1 relative min-h-0">
-        {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted">
-            <div className="text-center">
-              <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Loading map...</p>
-            </div>
-          </div>
-        ) : itemsWithLocation.length === 0 ? (
-          <div className="absolute inset-0 flex items-center justify-center bg-muted">
-            <div className="text-center p-4">
-              <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-              <h3 className="text-lg font-semibold mb-2">No items with location</h3>
-              <p className="text-muted-foreground">
-                {hasActiveFilters
-                  ? 'Try adjusting your filters'
-                  : 'Items with location data will appear here'}
-              </p>
-              {hasActiveFilters && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleClearFilters}
-                  className="mt-3"
-                >
-                  Clear Filters
-                </Button>
-              )}
-            </div>
-          </div>
-        ) : (
-          <ItemsMap items={itemsWithLocation} className="w-full h-full" />
-        )}
+        <ItemsMap items={items} onBoundsChange={handleBoundsChange} className="w-full h-full" />
       </div>
 
       {/* Legend */}

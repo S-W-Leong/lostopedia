@@ -1,25 +1,26 @@
 'use client'
 
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { Marker, InfoWindow, MarkerClusterer } from '@react-google-maps/api'
 import { MapContainer } from './MapContainer'
-import type { ItemCard } from '@/types'
+import type { MapBounds, MapMarker } from '@/lib/map-items'
+import { MapItemPopup } from './MapItemPopup'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, MapPin, ExternalLink } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
+import { ExternalLink } from 'lucide-react'
 
 interface ItemsMapProps {
-  items: ItemCard[]
+  items: MapMarker[]
   center?: { lat: number; lng: number }
   zoom?: number
   className?: string
   onMapLoad?: (map: google.maps.Map) => void
+  onBoundsChange?: (bounds: MapBounds) => void
 }
 
 interface MarkerData {
-  item: ItemCard
+  item: MapMarker
   position: { lat: number; lng: number }
 }
 
@@ -49,9 +50,11 @@ export function ItemsMap({
   zoom,
   className,
   onMapLoad,
+  onBoundsChange,
 }: ItemsMapProps) {
-  const [selectedItem, setSelectedItem] = useState<ItemCard | null>(null)
-  const [map, setMap] = useState<google.maps.Map | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const selectedItem = items.find(item => item.id === selectedId) ?? null
+  const mapRef = useRef<google.maps.Map | null>(null)
   const [themeColors, setThemeColors] = useState(FALLBACK_THEME_COLORS)
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export function ItemsMap({
   // Prepare markers data from items with geo locations
   const markersData = useMemo<MarkerData[]>(() => {
     return items
-      .filter((item) => item.geoLocation?.latitude && item.geoLocation?.longitude)
+      .filter((item) => Number.isFinite(item.geoLocation?.latitude) && Number.isFinite(item.geoLocation?.longitude))
       .map((item) => ({
         item,
         position: {
@@ -117,40 +120,24 @@ export function ItemsMap({
     }
   }, [themeColors])
 
-  // Fit bounds to show all markers
-  useEffect(() => {
-    if (map && markersData.length > 0) {
-      const bounds = new google.maps.LatLngBounds()
-      markersData.forEach(({ position }) => {
-        bounds.extend(position)
-      })
-      map.fitBounds(bounds)
-
-      // Don't zoom in too much for a single marker
-      const listener = google.maps.event.addListenerOnce(map, 'bounds_changed', () => {
-        const currentZoom = map.getZoom()
-        if (currentZoom && currentZoom > 16) {
-          map.setZoom(16)
-        }
-      })
-
-      return () => {
-        google.maps.event.removeListener(listener)
-      }
-    }
-  }, [map, markersData])
+  const handleBoundsChanged = useCallback(() => {
+    const bounds = mapRef.current?.getBounds()
+    if (bounds) onBoundsChange?.(bounds.toJSON())
+  }, [onBoundsChange])
 
   const handleMapLoad = useCallback((mapInstance: google.maps.Map) => {
-    setMap(mapInstance)
+    mapRef.current = mapInstance
     onMapLoad?.(mapInstance)
-  }, [onMapLoad])
+    const bounds = mapInstance.getBounds()
+    if (bounds) onBoundsChange?.(bounds.toJSON())
+  }, [onMapLoad, onBoundsChange])
 
   const handleMarkerClick = useCallback((markerData: MarkerData) => {
-    setSelectedItem(markerData.item)
+    setSelectedId(markerData.item.id)
   }, [])
 
   const handleInfoWindowClose = useCallback(() => {
-    setSelectedItem(null)
+    setSelectedId(null)
   }, [])
 
   return (
@@ -159,6 +146,7 @@ export function ItemsMap({
       zoom={zoom}
       className={className}
       onLoad={handleMapLoad}
+      onBoundsChanged={handleBoundsChanged}
     >
       {/* Marker Clustering */}
       <MarkerClusterer options={clusterOptions}>
@@ -188,17 +176,6 @@ export function ItemsMap({
           onCloseClick={handleInfoWindowClose}
         >
           <div className="p-2 max-w-xs">
-            {/* Image */}
-            {selectedItem.imageUrl && (
-              <div className="mb-2 rounded overflow-hidden">
-                <img
-                  src={selectedItem.imageUrl}
-                  alt={selectedItem.title}
-                  className="w-full h-32 object-cover"
-                />
-              </div>
-            )}
-
             {/* Badge */}
             <div className="mb-2">
               <Badge
@@ -218,26 +195,7 @@ export function ItemsMap({
               {selectedItem.title}
             </h3>
 
-            {/* Description */}
-            <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
-              {selectedItem.description}
-            </p>
-
-            {/* Location */}
-            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1">
-              <MapPin className="h-3 w-3" />
-              <span className="line-clamp-1">{selectedItem.locationText}</span>
-            </div>
-
-            {/* Date */}
-            <div className="flex items-center gap-1 text-xs text-muted-foreground mb-3">
-              <Calendar className="h-3 w-3" />
-              <span>
-                {formatDistanceToNow(new Date(selectedItem.createdAt), {
-                  addSuffix: true,
-                })}
-              </span>
-            </div>
+            <MapItemPopup key={selectedItem.id} item={selectedItem} />
 
             {/* View Details Button */}
             <Link href={`/item/${selectedItem.id}`}>
