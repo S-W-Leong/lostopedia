@@ -58,7 +58,7 @@ describe('requireApiUser', () => {
   })
 
   it('returns the Supabase client and user when authenticated', async () => {
-    const user = { id: 'user-1', email: 'student@tarc.edu.my' }
+    const user = { id: 'user-1', email: 'member@example.org' }
     const supabase = {
       auth: {
         getUser: vi.fn().mockResolvedValue({

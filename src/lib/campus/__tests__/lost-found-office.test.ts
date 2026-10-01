@@ -26,7 +26,7 @@ describe('lost-found-office', () => {
   })
 
   it('links only normalized telephone numbers', () => {
-    expect(safeTelephoneHref('+60 3-4145 0123')).toBe('tel:+60341450123')
-    expect(safeTelephoneHref('03-4145 0123 ext 3752')).toBeNull()
+    expect(safeTelephoneHref('+60 12-345-6789')).toBe('tel:+60123456789')
+    expect(safeTelephoneHref('012-345-6789 ext 9999')).toBeNull()
   })
 })
