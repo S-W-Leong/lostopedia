@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   useAuthReturn: {
     user: {
       id: 'user-1',
-      email: 'student@tarc.edu.my',
+      email: 'member@example.org',
     },
     profile: {
       id: 'user-1',
@@ -52,7 +52,7 @@ describe('ProfilePage', () => {
     mocks.useAuthReturn.isLoading = false
     mocks.useAuthReturn.user = {
       id: 'user-1',
-      email: 'student@tarc.edu.my',
+      email: 'member@example.org',
     }
     mocks.useAuthReturn.profile = {
       id: 'user-1',
@@ -78,9 +78,9 @@ describe('ProfilePage', () => {
     render(<ProfilePage />)
 
     expect(screen.getByTestId('password-reset-card')).toHaveTextContent(
-      'reset card for student@tarc.edu.my'
+      'reset card for member@example.org'
     )
-    expect(mocks.passwordResetCard).toHaveBeenCalledWith({ email: 'student@tarc.edu.my' })
+    expect(mocks.passwordResetCard).toHaveBeenCalledWith({ email: 'member@example.org' })
     expect(screen.getByText(/danger zone/i)).toBeInTheDocument()
   })
 
