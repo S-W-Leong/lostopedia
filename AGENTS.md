@@ -24,5 +24,9 @@ Vitest runs in `jsdom` with shared setup from `src/test/setup.ts`. Add tests bes
 ## Commit & Pull Request Guidelines
 Recent history follows Conventional Commits: `feat(cache): ...`, `fix(images): ...`, `chore(mcp): ...`. Keep subjects imperative and scoped when helpful. PRs should include a short summary, linked issue or planning doc, test notes, and screenshots for visible UI changes.
 
+Exclude temporary files, working notes, generated artifacts, tests (including test helpers and fixtures), and scripts from commits unless the user explicitly requests their inclusion. Tests and scripts may still be created and run locally for verification. Stage intended application changes, required database migrations, and explicitly requested repository guidance by exact file path; avoid blanket staging commands such as `git add .` or `git add -A`. Review the staged file list before committing to confirm excluded files are absent.
+
+Store temporary files, working notes, and local-only verification artifacts in the repository-root `.tmp/` directory. Move task-created tests and scripts excluded from the commit into `.tmp/` after verification, preserving their original relative paths. Leave existing tracked files in place.
+
 ## Security & Configuration Tips
 Start from `.env.example` and keep real secrets only in `.env.local`. Never commit API keys, Supabase secrets, or generated credentials. When changing database behavior, add a numbered SQL migration under `supabase/migrations` and document any operator-facing impact in `README.md` or the relevant `docs/` file.
