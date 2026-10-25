@@ -49,7 +49,7 @@ pnpm exec tsx scripts/configure-organization.ts --check
 pnpm run check:release
 ```
 
-Optional embedding, Redis, image backfill, and admin MCP scripts remain under `scripts/` and `mcp/lostopedia-admin/`. They use each deployment's own credentials and should be enabled only when needed.
+Organization setup, validation, release checks, and local-auth tooling remain under `scripts/`. The optional admin MCP runtime lives in `mcp/lostopedia-admin/` and uses each deployment's own credentials.
 
 ## Documentation
 

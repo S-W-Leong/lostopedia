@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-`src/app` holds Next.js App Router pages, layouts, and API routes. Shared UI lives in `src/components`, reusable business logic in `src/lib`, and client hooks in `src/hooks`. Test helpers live in `src/test`. Static assets belong in `public`, email templates in `templates`, automation or backfill scripts in `scripts`, and Supabase schema work in `supabase/migrations` plus `supabase/functions`. The admin MCP server is isolated under `mcp/lostopedia-admin`.
+`src/app` holds Next.js App Router pages, layouts, and API routes. Shared UI lives in `src/components`, reusable business logic in `src/lib`, and client hooks in `src/hooks`. Test helpers live in `src/test`. Static assets belong in `public`, email templates in `templates`, organization setup, validation, release checks, and local-auth tooling in `scripts`, and Supabase schema work in `supabase/migrations` plus `supabase/functions`. The admin MCP server is isolated under `mcp/lostopedia-admin`.
 
 ## Build, Test, and Development Commands
 Use `pnpm` for local work:

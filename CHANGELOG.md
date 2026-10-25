@@ -9,6 +9,10 @@ See [the release guide](docs/releases.md) for version rules and release steps.
 
 ## Unreleased
 
+### Removed
+
+- Retired legacy image and embedding backfills, manual Redis/embedding/moderation diagnostics, and their package commands, example credentials, and Unsplash setup guide.
+
 ### Added
 
 - Changelog, versioning guidance, and a maintainer release workflow.

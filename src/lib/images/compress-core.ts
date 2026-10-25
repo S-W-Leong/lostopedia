@@ -17,11 +17,9 @@ export interface CompressedImage {
  * Resize (never enlarge) and re-encode an image to WebP.
  * EXIF orientation is honored via .rotate(); all other metadata is stripped.
  *
- * No `server-only` guard here — this module is also imported by standalone
- * scripts (scripts/backfill-compress-images.ts) run via plain `tsx`/node,
- * which `server-only` rejects outside the Next.js build pipeline. App code
- * should import `compressImage` from `./compress` instead, which re-exports
- * this with the guard applied.
+ * The core stays independent of Next.js so it can be tested directly.
+ * App code should import `compressImage` from `./compress` instead,
+ * which re-exports this with the `server-only` guard applied.
  */
 export async function compressImage(
   input: ArrayBuffer | Buffer,
