@@ -13,16 +13,10 @@
     "test:ci": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "test:embeddings": "tsx scripts/test-embeddings.ts",
     "setup:organization": "tsx scripts/configure-organization.ts",
     "check:organization": "tsx scripts/check-organization.ts",
     "check:release": "tsx scripts/check-release.ts",
     "test:local-auth": "tsx scripts/test-local-auth.ts",
-    "backfill:images": "tsx scripts/backfill-images.ts",
-    "backfill:images:picsum": "tsx scripts/backfill-images-picsum.ts",
-    "backfill:images:pixabay": "tsx scripts/backfill-images-pixabay.ts",
-    "backfill:embeddings": "tsx scripts/backfill-embeddings.ts",
-    "backfill:compress-images": "tsx scripts/backfill-compress-images.ts",
     "mcp:lostopedia-admin": "tsx mcp/lostopedia-admin/stdio.ts"
   },
   "dependencies": {
