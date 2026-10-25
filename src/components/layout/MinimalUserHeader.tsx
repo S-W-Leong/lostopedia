@@ -11,10 +11,11 @@ import { useNotificationCount } from '@/hooks/useNotificationCount'
 import { NotificationDropdown } from '@/components/notifications/NotificationDropdown'
 import { useSidebar } from './UserLayoutWrapper'
 import { organization } from '@/lib/organization/config'
+import { NOTIFICATIONS_ENABLED } from '@/lib/constants'
 
 export function MinimalUserHeader() {
   const { profile, isLoading } = useAuth()
-  const { unreadCount: notificationCount } = useNotificationCount({ enabled: !!profile, userId: profile?.id ?? '' })
+  const { unreadCount: notificationCount } = useNotificationCount({ enabled: NOTIFICATIONS_ENABLED && !!profile, userId: profile?.id ?? '' })
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [notificationMenuOpen, setNotificationMenuOpen] = useState(false)
   const { mobileOpen, setMobileOpen } = useSidebar()
@@ -77,27 +78,29 @@ export function MinimalUserHeader() {
           ) : (
             <>
               {/* Notifications */}
-              <div className="relative">
-                <button
-                  onClick={() => setNotificationMenuOpen(!notificationMenuOpen)}
-                  className="relative p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-overlay transition-colors"
-                  aria-label="Notifications"
-                >
-                  <Bell className="h-5 w-5" />
-                  {notificationCount > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-xs"
-                    >
-                      {notificationCount > 99 ? '99+' : notificationCount}
-                    </Badge>
-                  )}
-                </button>
-                <NotificationDropdown
-                  isOpen={notificationMenuOpen}
-                  onClose={() => setNotificationMenuOpen(false)}
-                />
-              </div>
+              {NOTIFICATIONS_ENABLED && (
+                <div className="relative">
+                  <button
+                    onClick={() => setNotificationMenuOpen(!notificationMenuOpen)}
+                    className="relative p-2 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-overlay transition-colors"
+                    aria-label="Notifications"
+                  >
+                    <Bell className="h-5 w-5" />
+                    {notificationCount > 0 && (
+                      <Badge
+                        variant="destructive"
+                        className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-xs"
+                      >
+                        {notificationCount > 99 ? '99+' : notificationCount}
+                      </Badge>
+                    )}
+                  </button>
+                  <NotificationDropdown
+                    isOpen={notificationMenuOpen}
+                    onClose={() => setNotificationMenuOpen(false)}
+                  />
+                </div>
+              )}
 
               {/* User Menu */}
               <div className="relative">

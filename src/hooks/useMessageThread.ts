@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { usePolling } from './usePolling'
 import { createClient } from '@/lib/supabase/client'
-import { APP_CONFIG } from '@/lib/constants'
+import { APP_CONFIG, MESSAGING_ENABLED } from '@/lib/constants'
 import type { MessageWithUsers, Message } from '@/types'
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 
@@ -75,11 +75,12 @@ export function useMessageThread(
     avatarUrl: string | null
     reputationScore: number
   } | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(MESSAGING_ENABLED)
   const [error, setError] = useState<string | null>(null)
 
   // Fetch thread data
   const fetchThread = useCallback(async () => {
+    if (!MESSAGING_ENABLED) return
     if (!itemId || !otherUserId) {
       setError('Missing required parameters')
       setLoading(false)
@@ -145,6 +146,7 @@ export function useMessageThread(
 
   // Initial fetch
   useEffect(() => {
+    if (!MESSAGING_ENABLED) return
     if (itemId && otherUserId) {
       setLoading(true)
       fetchThread()
@@ -157,7 +159,7 @@ export function useMessageThread(
   // Realtime subscription for this thread when currentUserId is provided (thread view open)
   // Filter by item_id; in handler we only process rows where current user is sender or recipient
   useEffect(() => {
-    if (!itemId || !otherUserId || !currentUserId) return
+    if (!MESSAGING_ENABLED || !itemId || !otherUserId || !currentUserId) return
 
     const supabase = createClient()
     const channelName = `thread:${itemId}:${currentUserId}`
@@ -224,13 +226,13 @@ export function useMessageThread(
       interval: pollingInterval,
       immediate: false, // Don't start immediately, wait a bit after initial load
       pauseOnHidden: true,
-      enabled: !!itemId && !!otherUserId,
+      enabled: MESSAGING_ENABLED && !!itemId && !!otherUserId,
     }
   )
 
   // Start polling after initial load
   useEffect(() => {
-    if (!loading && itemId && otherUserId) {
+    if (MESSAGING_ENABLED && !loading && itemId && otherUserId) {
       // Wait a bit to avoid duplicate requests right after initial load
       const timeoutId = setTimeout(() => {
         startPolling()
@@ -246,6 +248,7 @@ export function useMessageThread(
   // Send a new message
   const sendMessage = useCallback(
     async (content: string): Promise<Message | null> => {
+      if (!MESSAGING_ENABLED) return null
       if (!itemId || !otherUserId) {
         throw new Error('Missing required parameters')
       }
@@ -301,6 +304,7 @@ export function useMessageThread(
 
   // Mark all messages in thread as read
   const markAsRead = useCallback(async () => {
+    if (!MESSAGING_ENABLED) return
     if (!itemId || !otherUserId) return
 
     try {
@@ -342,6 +346,7 @@ export function useMessageThread(
 
   // Manual refresh
   const refreshThread = useCallback(async () => {
+    if (!MESSAGING_ENABLED) return
     setLoading(true)
     await fetchThread()
   }, [fetchThread])

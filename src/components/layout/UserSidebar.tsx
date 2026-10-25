@@ -44,7 +44,7 @@ export function UserSidebar() {
 
   const [isHovered, setIsHovered] = useState(false)
   const { setIsExpanded, mobileOpen, setMobileOpen } = useSidebar()
-  const { unreadCount } = useUnreadCount({ enabled: !!profile, userId: profile?.id ?? '' })
+  const { unreadCount } = useUnreadCount({ enabled: MESSAGING_ENABLED && !!profile, userId: profile?.id ?? '' })
 
   // Sidebar is collapsed by default on desktop, expands on hover
   // On mobile, always expanded when open

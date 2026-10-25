@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { MESSAGING_ENABLED } from '@/lib/constants'
 import { effectiveItemStatus } from '@/lib/utils/item-status'
 import type { MessageWithUsers } from '@/types'
 
@@ -8,6 +9,9 @@ import type { MessageWithUsers } from '@/types'
  */
 export async function GET(request: NextRequest) {
   try {
+    if (!MESSAGING_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Messaging is disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication

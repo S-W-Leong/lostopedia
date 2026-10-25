@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { usePolling } from './usePolling'
 import { useRealtimeNotifications } from './useRealtimeNotifications'
-import { APP_CONFIG } from '@/lib/constants'
+import { APP_CONFIG, NOTIFICATIONS_ENABLED } from '@/lib/constants'
 import type { Notification } from '@/types'
 
 export interface UseNotificationsOptions {
@@ -62,10 +62,11 @@ export function useNotifications(
     limit = 50,
     offset = 0,
     pollingInterval = APP_CONFIG.pollingIntervals.notifications,
-    enabled = true,
+    enabled: requestedEnabled = true,
     userId,
     useRealtime = !!userId,
   } = options
+  const enabled = NOTIFICATIONS_ENABLED && requestedEnabled
 
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [total, setTotal] = useState(0)
@@ -75,6 +76,7 @@ export function useNotifications(
 
   // Fetch notifications
   const fetchNotifications = useCallback(async () => {
+    if (!enabled) return
     try {
       const params = new URLSearchParams({
         limit: limit.toString(),
@@ -114,7 +116,7 @@ export function useNotifications(
     } finally {
       setLoading(false)
     }
-  }, [unreadOnly, limit, offset])
+  }, [enabled, unreadOnly, limit, offset])
 
   // Initial fetch only when enabled (authenticated)
   useEffect(() => {
@@ -157,6 +159,7 @@ export function useNotifications(
   // Mark a single notification as read
   const markAsRead = useCallback(
     async (notificationId: string): Promise<boolean> => {
+      if (!enabled) return false
       try {
         const response = await fetch(`/api/notifications/${notificationId}/read`, {
           method: 'PATCH',
@@ -188,11 +191,12 @@ export function useNotifications(
         return false
       }
     },
-    []
+    [enabled]
   )
 
   // Mark all notifications as read
   const markAllAsRead = useCallback(async (): Promise<number> => {
+    if (!enabled) return 0
     try {
       const response = await fetch('/api/notifications/read-all', {
         method: 'PATCH',
@@ -225,7 +229,7 @@ export function useNotifications(
       setError(errorMessage)
       return 0
     }
-  }, [])
+  }, [enabled])
 
   // Manual refresh (no-op when disabled)
   const refreshNotifications = useCallback(async () => {

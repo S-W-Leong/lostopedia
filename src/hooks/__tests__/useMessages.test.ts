@@ -4,6 +4,12 @@ import { useMessages } from '../useMessages'
 import { mockFetch, mockFetchError, setupGlobalMocks } from '@/test/utils'
 import { mockConversations } from '@/test/mocks/messages'
 
+vi.mock('@/lib/constants', async (importOriginal) => ({
+  ...await importOriginal<typeof import('@/lib/constants')>(),
+  MESSAGING_ENABLED: true,
+  NOTIFICATIONS_ENABLED: true,
+}))
+
 describe('useMessages', () => {
   beforeEach(() => {
     setupGlobalMocks()

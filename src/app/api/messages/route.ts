@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { sendMessageSchema } from '@/lib/validations/message'
 import { createNotification } from '@/lib/supabase/notifications'
 import type { Conversation, Message } from '@/types'
-import { APP_CONFIG } from '@/lib/constants'
+import { APP_CONFIG, MESSAGING_ENABLED } from '@/lib/constants'
 import { rateLimiters } from '@/lib/ratelimit'
 import { createApiErrorResponse } from '@/lib/utils/errors'
 import { sanitizeDisplayName, sanitizeItemTitle } from '@/lib/utils/sanitize'
@@ -14,6 +14,9 @@ import { effectiveItemStatus } from '@/lib/utils/item-status'
  */
 export async function POST(request: NextRequest) {
   try {
+    if (!MESSAGING_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Messaging is disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication
@@ -200,6 +203,9 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
+    if (!MESSAGING_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Messaging is disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication

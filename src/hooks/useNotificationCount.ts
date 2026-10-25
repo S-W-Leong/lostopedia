@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { usePolling } from './usePolling'
-import { APP_CONFIG } from '@/lib/constants'
+import { APP_CONFIG, NOTIFICATIONS_ENABLED } from '@/lib/constants'
 import { useRealtimeNotifications } from './useRealtimeNotifications'
 import { organization } from '@/lib/organization/config'
 
@@ -40,9 +40,10 @@ export function useNotificationCount(
 ): UseNotificationCountReturn {
   const {
     pollingInterval = APP_CONFIG.pollingIntervals.notifications,
-    enabled = true,
+    enabled: requestedEnabled = true,
     userId = '',
   } = options
+  const enabled = NOTIFICATIONS_ENABLED && requestedEnabled
 
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(enabled)
@@ -51,6 +52,7 @@ export function useNotificationCount(
 
   // Fetch unread count
   const fetchUnreadCount = useCallback(async () => {
+    if (!enabled) return
     try {
       const response = await fetch('/api/notifications?limit=1&unreadOnly=true')
       const data = await response.json()
@@ -94,7 +96,7 @@ export function useNotificationCount(
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [enabled])
 
   // Initial fetch only when enabled (authenticated)
   useEffect(() => {

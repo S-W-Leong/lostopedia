@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { usePolling } from './usePolling'
 import { useRealtimeMessages } from './useRealtimeMessages'
-import { APP_CONFIG } from '@/lib/constants'
+import { APP_CONFIG, MESSAGING_ENABLED } from '@/lib/constants'
 import type { Conversation, Message } from '@/types'
 
 export interface UseMessagesOptions {
@@ -47,11 +47,12 @@ export interface UseMessagesReturn {
 export function useMessages(options: UseMessagesOptions = {}): UseMessagesReturn {
   const { userId, useRealtime = !!userId } = options
   const [conversations, setConversations] = useState<Conversation[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(MESSAGING_ENABLED)
   const [error, setError] = useState<string | null>(null)
 
   // Fetch conversations
   const fetchConversations = useCallback(async () => {
+    if (!MESSAGING_ENABLED) return
     try {
       const response = await fetch('/api/messages')
       const data = await response.json()
@@ -89,7 +90,7 @@ export function useMessages(options: UseMessagesOptions = {}): UseMessagesReturn
   // Set up realtime subscriptions when userId is available
   useRealtimeMessages({
     userId: userId || '',
-    enabled: useRealtime && !!userId,
+    enabled: MESSAGING_ENABLED && useRealtime && !!userId,
     onNewMessage: (_message) => {
       // When a new message arrives, refresh conversations to update the list
       fetchConversations()
@@ -107,13 +108,14 @@ export function useMessages(options: UseMessagesOptions = {}): UseMessagesReturn
       interval: pollingInterval,
       immediate: false, // Don't start immediately, let component control it
       pauseOnHidden: true,
-      enabled: !useRealtime || !userId, // Disable polling if realtime is active
+      enabled: MESSAGING_ENABLED && (!useRealtime || !userId),
     }
   )
 
   // Send a new message
   const sendMessage = useCallback(
     async (itemId: string, recipientId: string, content: string): Promise<Message | null> => {
+      if (!MESSAGING_ENABLED) return null
       try {
         const response = await fetch('/api/messages', {
           method: 'POST',
@@ -150,6 +152,7 @@ export function useMessages(options: UseMessagesOptions = {}): UseMessagesReturn
 
   // Manual refresh
   const refreshConversations = useCallback(async () => {
+    if (!MESSAGING_ENABLED) return
     setLoading(true)
     await fetchConversations()
   }, [fetchConversations])
