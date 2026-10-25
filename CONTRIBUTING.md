@@ -2,6 +2,8 @@
 
 This repository is a single-organization lost-and-found template. Please keep sample configuration fictional, avoid hardcoded deployment identities, and do not add real users, claimant records, credentials, or institution images to tests or seeds. See [deployment](docs/deployment.md) for a fresh local setup and [customization](docs/customization.md) for the configuration contract.
 
+Record notable changes in [CHANGELOG.md](CHANGELOG.md) under `Unreleased`. Keep release versions in `package.json`; do not bump the version for every contribution. See [versions and releases](docs/releases.md) for the maintainer workflow and the existing public baseline.
+
 Before opening a pull request:
 
 ```bash

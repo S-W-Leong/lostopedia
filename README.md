@@ -2,6 +2,10 @@
 
 A lost-and-found application for one organization per deployment. This repository includes the Next.js app, a fresh Supabase schema, Auth email templates, and a scheduled expiration function. The checked-in configuration describes a **fictional Example Community** with registration restricted to `example.org`; replace it before inviting real members.
 
+## Version and changelog
+
+The existing public baseline is **0.1.0**, matching `package.json`. Formal release tracking began on **2026-10-25**; that is the baseline recording date, not the original launch date. See the [changelog](CHANGELOG.md), [GitHub releases](https://github.com/S-W-Leong/lostopedia/releases), and [maintainer release guide](docs/releases.md). Template versions are independent of each organization's deployment versions.
+
 ## Start a fresh installation
 
 Follow [the deployment guide](docs/deployment.md) from the first step. The short version is:

@@ -30,3 +30,6 @@ Store temporary files, working notes, and local-only verification artifacts in t
 
 ## Security & Configuration Tips
 Start from `.env.example` and keep real secrets only in `.env.local`. Never commit API keys, Supabase secrets, or generated credentials. When changing database behavior, add a numbered SQL migration under `supabase/migrations` and document any operator-facing impact in `README.md` or the relevant `docs/` file.
+
+## Versions and Changelog
+`package.json` is the public template's version source. Record notable changes under `Unreleased` in `CHANGELOG.md`; that section describes changes not yet included in a tagged template release. The existing public `0.1.0` baseline was recorded on 2026-10-25, after the template was already available; this is not its original launch date. Follow `docs/releases.md` when preparing releases, updating the version and notes together. Do not bump versions per commit or treat a template release as an organization's deployment. Keep existing published tags immutable. Publishing a release requires an explicit request from the maintainer.
