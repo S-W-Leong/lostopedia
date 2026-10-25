@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { NOTIFICATIONS_ENABLED } from '@/lib/constants'
 import type { Notification } from '@/types'
 
 /**
@@ -8,6 +9,9 @@ import type { Notification } from '@/types'
  */
 export async function GET(request: NextRequest) {
   try {
+    if (!NOTIFICATIONS_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Notifications are disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication

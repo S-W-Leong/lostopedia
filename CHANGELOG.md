@@ -9,6 +9,10 @@ See [the release guide](docs/releases.md) for version rules and release steps.
 
 ## Unreleased
 
+### Fixed
+
+- Disabled messaging and notifications no longer fetch counts or lists, poll, request browser notification permission, or open Realtime subscriptions. Their API routes return 404 without database access, and notification controls are hidden while paused.
+
 ### Removed
 
 - Retired legacy image and embedding backfills, manual Redis/embedding/moderation diagnostics, and their package commands, example credentials, and Unsplash setup guide.

@@ -32,7 +32,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useUnreadCount } from '@/hooks/useUnreadCount'
 import { useNotificationCount } from '@/hooks/useNotificationCount'
 import { NotificationDropdown } from '@/components/notifications/NotificationDropdown'
-import { MESSAGING_ENABLED } from '@/lib/constants'
+import { MESSAGING_ENABLED, NOTIFICATIONS_ENABLED } from '@/lib/constants'
 import { organization } from '@/lib/organization/config'
 
 const navItems = [
@@ -49,7 +49,7 @@ export function Header() {
   const { profile, isLoading } = useAuth()
   const countEnabled = Boolean(profile) && !isLoading
   const { unreadCount } = useUnreadCount({ enabled: MESSAGING_ENABLED && countEnabled, userId: profile?.id ?? '' })
-  const { unreadCount: notificationCount } = useNotificationCount({ enabled: countEnabled, userId: profile?.id ?? '' })
+  const { unreadCount: notificationCount } = useNotificationCount({ enabled: NOTIFICATIONS_ENABLED && countEnabled, userId: profile?.id ?? '' })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [notificationMenuOpen, setNotificationMenuOpen] = useState(false)
   const notificationTriggerRef = useRef<HTMLButtonElement>(null)
@@ -114,32 +114,34 @@ export function Header() {
           {/* Right side actions */}
           <div className="flex items-center gap-2">
             {/* Notifications */}
-            <div className="relative">
-              <button
-                ref={notificationTriggerRef}
-                type="button"
-                onClick={() => setNotificationMenuOpen(!notificationMenuOpen)}
-                className="relative inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-bg-overlay hover:text-text-primary"
-                aria-label="Notifications"
-                aria-haspopup="dialog"
-                aria-expanded={notificationMenuOpen}
-              >
-                <Bell className="h-5 w-5" />
-                {notificationCount > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-xs"
-                  >
-                    {notificationCount > 99 ? '99+' : notificationCount}
-                  </Badge>
-                )}
-              </button>
-              <NotificationDropdown
-                isOpen={notificationMenuOpen}
-                onClose={() => setNotificationMenuOpen(false)}
-                triggerRef={notificationTriggerRef}
-              />
-            </div>
+            {NOTIFICATIONS_ENABLED && (
+              <div className="relative">
+                <button
+                  ref={notificationTriggerRef}
+                  type="button"
+                  onClick={() => setNotificationMenuOpen(!notificationMenuOpen)}
+                  className="relative inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-bg-overlay hover:text-text-primary"
+                  aria-label="Notifications"
+                  aria-haspopup="dialog"
+                  aria-expanded={notificationMenuOpen}
+                >
+                  <Bell className="h-5 w-5" />
+                  {notificationCount > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center px-1 text-xs"
+                    >
+                      {notificationCount > 99 ? '99+' : notificationCount}
+                    </Badge>
+                  )}
+                </button>
+                <NotificationDropdown
+                  isOpen={notificationMenuOpen}
+                  onClose={() => setNotificationMenuOpen(false)}
+                  triggerRef={notificationTriggerRef}
+                />
+              </div>
+            )}
 
             {/* User Menu */}
             <DropdownMenu>

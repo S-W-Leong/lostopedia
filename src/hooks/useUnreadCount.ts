@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { usePolling } from './usePolling'
 import { useRealtimeMessages } from './useRealtimeMessages'
 import { organization } from '@/lib/organization/config'
+import { MESSAGING_ENABLED } from '@/lib/constants'
 
 export interface UseUnreadCountOptions {
   /** When false, skips initial fetch and no API requests are made. Use for guests. Default true. */
@@ -35,7 +36,8 @@ export interface UseUnreadCountReturn {
  * ```
  */
 export function useUnreadCount(options: UseUnreadCountOptions = {}): UseUnreadCountReturn {
-  const { enabled = true, userId = '' } = options
+  const { enabled: requestedEnabled = true, userId = '' } = options
+  const enabled = MESSAGING_ENABLED && requestedEnabled
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(enabled)
   const [error, setError] = useState<string | null>(null)
@@ -43,6 +45,7 @@ export function useUnreadCount(options: UseUnreadCountOptions = {}): UseUnreadCo
 
   // Fetch unread count
   const fetchUnreadCount = useCallback(async () => {
+    if (!enabled) return
     try {
       const response = await fetch('/api/messages/unread-count')
       const data = await response.json()
@@ -87,7 +90,7 @@ export function useUnreadCount(options: UseUnreadCountOptions = {}): UseUnreadCo
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [enabled])
 
   // Initial fetch only when enabled (authenticated)
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { MESSAGING_ENABLED } from '@/lib/constants'
 
 /**
  * PATCH /api/messages/[id]/read - Mark a message as read
@@ -9,6 +10,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!MESSAGING_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Messaging is disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication

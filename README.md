@@ -31,6 +31,7 @@ pnpm run dev
 
 - Browsing, search, map, and item details require authentication.
 - Messaging is paused by default (`MESSAGING_ENABLED = false`). Members can use available profile contact details.
+- Notifications are also paused by default (`NOTIFICATIONS_ENABLED = false`). Both flags live in `src/lib/constants.ts` and hide the corresponding controls, stop client fetches, polling, browser permission prompts, and Realtime subscriptions, and make their API routes return 404 before database access. Set the corresponding flag to `true` and rebuild/restart to restore a feature. Notification generation in database workflows is unchanged.
 - Admin automation and the MCP endpoint are paused by default (`NEXT_PUBLIC_ADMIN_AUTOMATION_ENABLED=false`).
 - Images in the `avatars` and `item-images` buckets have public URLs. Only an owner may mutate files under their UUID prefix.
 - The sample office has no phone, email, hours, or map link. Configure them before presenting collection instructions.

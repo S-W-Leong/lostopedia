@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { NOTIFICATIONS_ENABLED } from '@/lib/constants'
 import type { Notification } from '@/types'
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 
@@ -38,7 +39,7 @@ export function useRealtimeNotifications({
   onStatusChange,
 }: UseRealtimeNotificationsOptions) {
   useEffect(() => {
-    if (!enabled || !userId) return
+    if (!NOTIFICATIONS_ENABLED || !enabled || !userId) return
 
     const supabase = createClient()
 

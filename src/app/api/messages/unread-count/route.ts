@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { MESSAGING_ENABLED } from '@/lib/constants'
 
 /**
  * GET /api/messages/unread-count - Get unread message count for current user
  */
 export async function GET(_request: NextRequest) {
   try {
+    if (!MESSAGING_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Messaging is disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication

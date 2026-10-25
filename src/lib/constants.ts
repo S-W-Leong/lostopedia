@@ -5,6 +5,7 @@ import { organization } from '@/lib/organization/config'
 
 // Feature flags
 export const MESSAGING_ENABLED = false
+export const NOTIFICATIONS_ENABLED = false
 
 // Item categories
 export const ITEM_CATEGORIES = [

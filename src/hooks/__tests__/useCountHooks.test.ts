@@ -20,6 +20,12 @@ vi.mock('../useRealtimeMessages', () => ({
   },
 }))
 
+vi.mock('@/lib/constants', async (importOriginal) => ({
+  ...await importOriginal<typeof import('@/lib/constants')>(),
+  MESSAGING_ENABLED: true,
+  NOTIFICATIONS_ENABLED: true,
+}))
+
 describe('count hooks', () => {
   beforeEach(() => {
     vi.clearAllMocks()

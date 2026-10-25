@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { MESSAGING_ENABLED } from '@/lib/constants'
 import type { Message } from '@/types'
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js'
 
@@ -44,7 +45,7 @@ export function useRealtimeMessages({
   onStatusChange,
 }: UseRealtimeMessagesOptions) {
   useEffect(() => {
-    if (!enabled || !userId) return
+    if (!MESSAGING_ENABLED || !enabled || !userId) return
 
     const supabase = createClient()
 

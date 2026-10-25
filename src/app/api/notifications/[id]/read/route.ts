@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { NOTIFICATIONS_ENABLED } from '@/lib/constants'
 
 /**
  * PATCH /api/notifications/[id]/read - Mark a single notification as read
@@ -9,6 +10,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!NOTIFICATIONS_ENABLED) {
+      return NextResponse.json({ success: false, error: 'Notifications are disabled' }, { status: 404 })
+    }
     const supabase = await createClient()
 
     // Verify authentication
