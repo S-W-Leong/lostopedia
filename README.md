@@ -36,6 +36,7 @@ pnpm run dev
 - Images in the `avatars` and `item-images` buckets have public URLs. Only an owner may mutate files under their UUID prefix.
 - The sample office has no phone, email, hours, or map link. Configure them before presenting collection instructions.
 - Expiration reminders and archival require the separately secured [Edge Function schedule](supabase/functions/item-expiration-cron/README.md).
+- Optional [encrypted database/Auth backups](docs/operations/supabase-backup.md) use GitHub Actions and private Cloudflare R2. They are disabled until each operator configures and validates recovery; uploaded image files are excluded.
 
 ## Common commands
 
@@ -60,6 +61,9 @@ Organization setup, validation, release checks, and local-auth tooling remain un
 - [Admin guide](docs/user-side/ADMIN_GUIDE.md)
 - [Auth email templates](templates/README.md)
 - [Admin MCP adapter](mcp/lostopedia-admin/README.md)
+- [Backup setup and operation](docs/operations/supabase-backup.md)
+- [Recovery procedure](docs/operations/supabase-recovery.md)
+- [Recovery drill checklist](docs/operations/supabase-recovery-drill-template.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security reporting](SECURITY.md)
 

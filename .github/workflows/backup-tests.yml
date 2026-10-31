@@ -1,0 +1,50 @@
+name: Backup tooling tests
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/backup/**'
+      - '.github/workflows/*backup*.yml'
+      - 'supabase/migrations/**'
+      - 'config/organization.json'
+  push:
+    branches: [main, dev]
+    paths:
+      - 'scripts/backup/**'
+      - '.github/workflows/*backup*.yml'
+      - 'supabase/migrations/**'
+      - 'config/organization.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17.6@sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929
+        env:
+          POSTGRES_USER: runner
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 55439:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install verified tooling (no production credentials)
+        run: bash scripts/backup/install-tools.sh
+      - name: Offline and synthetic PostgreSQL backup/restore tests
+        env:
+          BACKUP_TEST_POSTGRES: '1'
+        run: python3 -m unittest discover -s scripts/backup/tests -p 'test_*.py' -v
+      - name: Check shell syntax
+        run: bash -n scripts/backup/backup.sh scripts/backup/install-tools.sh
