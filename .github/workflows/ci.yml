@@ -37,6 +37,9 @@ jobs:
   database:
     name: Fresh database checks
     runs-on: ubuntu-latest
+    env:
+      # Use Supabase's GHCR mirror to avoid public ECR pull limits on shared runners.
+      SUPABASE_INTERNAL_IMAGE_REGISTRY: ghcr.io
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
