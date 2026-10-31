@@ -19,6 +19,7 @@ See [the release guide](docs/releases.md) for version rules and release steps.
 
 ### Added
 
+- Opt-in weekly encrypted Supabase database/Auth backups to private Cloudflare R2, with verified uploads, eight completed recovery points, template-aware recovery tests, and setup/recovery guides. Each deployment must configure and validate recovery; uploaded image files and external settings are excluded.
 - Changelog, versioning guidance, and a maintainer release workflow.
 
 ## 0.1.0 — Existing public baseline (recorded 2026-10-25)

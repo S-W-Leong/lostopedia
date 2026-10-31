@@ -47,6 +47,10 @@ gitleaks-report.*
 *.bak
 *.sqlite
 *.sql.gz
+*.age
+*.agekey
+__pycache__/
+*.pyc
 *.key
 *.p12
 *.pfx
